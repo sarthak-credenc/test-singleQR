@@ -42,6 +42,7 @@
             margin: 10px 0;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -59,8 +60,6 @@
             <button onclick="decodeQR()" class="pay-button">Pay with QR Code</button>
         </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
     <script>
         function decodeQR() {
             const qrImage = document.getElementById('qrCode');

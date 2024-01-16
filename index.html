@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment Options</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .payment-option {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .payment-option h2 {
+            color: #333;
+        }
+        .pay-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: none;
+        }
+        .qr-code {
+            max-width: 200px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="payment-option">
+            <h2>Pay with Card or EMI</h2>
+            <p>Use Credit Card, Debit Card, or No Cost EMI</p>
+            <a href="https://feepay.credenc.com" class="pay-button">Pay Here</a>
+        </div>
+
+        <div class="payment-option">
+            <h2>Pay with UPI</h2>
+            <img id="qrCode" src="https://i.ibb.co/41YBF7B/Screenshot-2024-01-16-at-1-12-34-PM.png" alt="QR Code" class="qr-code">
+            <button onclick="decodeQR()" class="pay-button">Pay with QR Code</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+    <script>
+        function decodeQR() {
+            const qrImage = document.getElementById('qrCode');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            const image = new Image();
+
+            image.onload = () => {
+                canvas.width = image.width;
+                canvas.height = image.height;
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                if (code) {
+                    window.location.href = code.data;
+                } else {
+                    alert('Failed to decode QR code.');
+                }
+            };
+
+            image.src = qrImage.src;
+        }
+    </script>
+</body>
+</html>

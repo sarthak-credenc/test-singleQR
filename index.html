@@ -113,6 +113,51 @@ button:hover {
     background-color: #45a049;
 }
 
+/* Slider Styles */
+.slider-container {
+    margin: 20px 0;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;   
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%; 
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.amount-display {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+
 /* Add styles for your container and payment-option classes */
 
 
@@ -153,7 +198,7 @@ button:hover {
             <span class="close" onclick="closePopup()">&times;</span>
             <h3>UPI Payment</h3>
             <form id="upiForm">
-                <input type="number" id="amount" placeholder="Enter Amount" required>
+                <input type="number" id="amount" placeholder="Enter Amount or select from botton" required>
                 
                 <div style="display:flex" class="quick-amounts">
                 <button type="button" onclick="setAmount(1000)">₹1000</button>
@@ -161,6 +206,13 @@ button:hover {
                 <button type="button" onclick="setAmount(3000)">₹3000</button>
                 <!-- Add more buttons as needed -->
             </div>
+            
+            <div class="slider-container">
+                <label for="amountRange">Select Amount:</label>
+                <input type="range" id="amountRange" class="slider" min="500" max="50000" step="500" value="1000" oninput="updateAmountDisplay(this.value)">
+                <div class="amount-display">₹<span id="amountDisplay">1000</span></div>
+            </div>
+            <input type="hidden" id="amount" value="1000">
                 <input type="text" id="rollNumber" placeholder="Phone Number/Roll Number" required>
                 <label>Select App:</label>
                 <select id="upiApp">
@@ -208,6 +260,11 @@ function generateUpiLink(amount, rollNumber, app) {
 }
 function setAmount(amount) {
     document.getElementById("amount").value = amount;
+}
+
+function updateAmountDisplay(value) {
+    document.getElementById("amountDisplay").textContent = value;
+    document.getElementById("amount").value = value;
 }
 
 </script>

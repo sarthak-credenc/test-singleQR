@@ -56,6 +56,68 @@
             bottom: 0;
             width: 100%;
         }
+        /* Popup Modal Styles */
+/* Popup Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 3em;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Add styles for your container and payment-option classes */
+
+
+/* Add styles for your container and payment-option classes */
+
     </style>
 </head>
 <body>
@@ -70,14 +132,83 @@
             <a href="https://feepay.credenc.com" class="pay-button">Pay Here</a>
         </div>
 
+        <!--<div class="payment-option">
+            <h2>Pay with UPI</h2>
+            
+            <a href="upi://pay?pa=20230811773041@yesbank&pn=DETECHIE%20DIGITAL%20ACADEMY%20PRIVATE%20LIMITED" class="pay-button">Pay with UPI apps</a>
+        </div>-->
         <div class="payment-option">
             <h2>Pay with UPI</h2>
-            <a href="upi://pay?pa=20230811773041@yesbank&pn=DETECHIE%20DIGITAL%20ACADEMY%20PRIVATE%20LIMITED" class="pay-button">Pay with UPI apps</a>
+            <a  class="pay-button" onclick="showPopup()">Pay with UPI App</a>
         </div>
     </div>
 
     <div class="footer">
         <p>© 2024 Credenc. All rights reserved.</p>
     </div>
+    
+    
+    <div id="popupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h3>UPI Payment</h3>
+            <form id="upiForm">
+                <input type="number" id="amount" placeholder="Enter Amount" required>
+                
+                <div style="display:flex" class="quick-amounts">
+                <button type="button" onclick="setAmount(1000)">₹1000</button>
+                <button type="button" onclick="setAmount(2000)">₹2000</button>
+                <button type="button" onclick="setAmount(3000)">₹3000</button>
+                <!-- Add more buttons as needed -->
+            </div>
+                <input type="text" id="rollNumber" placeholder="Phone Number/Roll Number" required>
+                <label>Select App:</label>
+                <select id="upiApp">
+                    <option value="paytm">Paytm</option>
+                    <option value="phonepe">PhonePe</option>
+                    <option value="googlepay">Google Pay</option>
+                    <option value="upi">Other</option>
+                </select>
+                <button type="submit">Proceed</button>
+            </form>
+        </div>
+    </div>
 </body>
+
+<script>
+function showPopup() {
+    document.getElementById("popupModal").style.display = "block";
+}
+
+function closePopup() {
+    document.getElementById("popupModal").style.display = "none";
+}
+
+document.getElementById("upiForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var amount = document.getElementById("amount").value;
+    var rollNumber = document.getElementById("rollNumber").value;
+    var selectedApp = document.getElementById("upiApp").value;
+    var upiLink = generateUpiLink(amount, rollNumber, selectedApp);
+    console.log(upiLink)
+    window.location.href = upiLink;
+});
+function generateUpiLink(amount, rollNumber, app) {
+    var pa = "20230811773041@yesbank";
+    var pn = "DETECHIE%20DIGITAL%20ACADEMY%20PRIVATE%20LIMITED";
+    var encodedRollNumber = encodeURIComponent(rollNumber);
+
+    if (app === "googlepay") {
+        // Google Pay (Tez) specific URL format
+        return `tez://upi/pay?pa=${pa}&pn=${pn}&am=${amount}&tn=${encodedRollNumber}&cu=INR`;
+    } else {
+        // Standard UPI URL format for other apps (including 'upi' option)
+        return `${app}://pay?pa=${pa}&pn=${pn}&am=${amount}&tn=${encodedRollNumber}`;
+    }
+}
+function setAmount(amount) {
+    document.getElementById("amount").value = amount;
+}
+
+</script>
 </html>
